@@ -1,26 +1,51 @@
 import React from "react";
-import logo from "../assets/logo.svg";
+import Display from "./Display";
 import "../styles/App.css";
 
-function App() {
+function Button({ name, onClick }) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <button className="btn" onClick={onClick}>
+      {name}
+    </button>
   );
+}
+
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: props.initialCount };
+  }
+
+  incrementCount = () => {
+    this.setState(({ count }) => ({ count: count + 1 }));
+  };
+
+  decrementCount() {
+    this.setState(({ count }) => ({ count: count - 1 }));
+  }
+
+  render() {
+    const style =
+      this.state.count < 0 ? "display-negative" : "display-positive";
+
+    return (
+      <div className="counter">
+        <Display value={this.state.count} style={style} />
+        <Button name="+" onClick={this.incrementCount} />
+        <Button name="-" onClick={this.decrementCount.bind(this)} />
+      </div>
+    );
+  }
+}
+
+function App() {
+  const counters = [0, -2, 5, -3, 8];
+
+  const items = counters.map((count, index) => (
+    <Counter key={index} initialCount={count} />
+  ));
+
+  return <React.Fragment>{items}</React.Fragment>;
 }
 
 export default App;
